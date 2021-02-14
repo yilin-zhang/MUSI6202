@@ -1,0 +1,10 @@
+Question 3.4:
+sample rate: 44100 Hz
+sample points = sample rate * 0.5 seconds = 22050 points
+resolution = sample rate / sample points = 2 Hz/bin
+
+Question 3.5:
+The sample rate stays but the number of sample points increases, so the
+corresponding value of hertz per bin decreases, which leads to a higher/better
+resolution. (I mean the word "resolution" in common sense, not what it is
+defined in the previous question.)

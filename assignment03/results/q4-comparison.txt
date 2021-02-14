@@ -1,0 +1,6 @@
+Both spectrograms show the spectral leakage, but it's more obvious in the one using rectangular window.
+This effect is due to the fact that the rectangular window has more intense frequency ripples.
+
+2 observations:
+1. The frequencies that should show 0 magnitude in the rectangular window one are intensified.
+2. Certain harmonics are clearly intensified or diminished in the rectangular window one.
