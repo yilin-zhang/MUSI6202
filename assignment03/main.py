@@ -7,16 +7,9 @@ import matplotlib.pyplot as plt
 def generateSinusoidal(amplitude: float, sampling_rate_Hz: int, frequency_Hz: float,
                        length_secs: float, phase_radians: float) -> Tuple[np.array, np.array]:
     num_samples = round(length_secs * sampling_rate_Hz)
-    audio_array = np.zeros(num_samples)
-    time_array = np.zeros(num_samples)
-
-    for i in range(num_samples):
-        current_phase = np.fmod(phase_radians + 2 * np.pi * frequency_Hz / sampling_rate_Hz * i, 2*np.pi)
-        current_time = 1 / sampling_rate_Hz * i
-        audio_array[i] = np.sin(current_phase)
-        time_array[i] = current_time
-
-    audio_array *= amplitude
+    steps = np.arange(0, num_samples, dtype=np.int64)
+    audio_array = amplitude * np.sin(2 * np.pi * frequency_Hz * steps / sampling_rate_Hz + phase_radians)
+    time_array = steps / sampling_rate_Hz
 
     return audio_array, time_array
 
@@ -41,10 +34,9 @@ def generateSquare(amplitude: float, sampling_rate_Hz: int, frequency_Hz: float,
 def computeSpectrum(x: np.array, sample_rate_Hz: int) -> \
         Tuple[np.array, np.array, np.array, np.array, np.array]:
     signal_len = len(x)
-    x_fft = np.fft.fft(x)
+    x_fft = np.fft.fft(x) / signal_len
 
     # calculate the length of the non-repeated fft
-    fft_len = 0
     if signal_len % 2 == 0:
         # the length is even
         fft_len = signal_len // 2 + 1
@@ -98,7 +90,7 @@ def mySpecgram(x: np.array, block_size: int, hop_size: int, sampling_rate_Hz: in
         win = np.hanning(block_size).reshape(block_size, 1)
         blocks = blocks * win
 
-    magnitude_spectrogram = abs(np.fft.rfft(blocks, axis=0))
+    magnitude_spectrogram = abs(np.fft.rfft(blocks, axis=0) / block_size)
     freq_vector = np.linspace(0, sampling_rate_Hz/2, num=magnitude_spectrogram.shape[0], endpoint=False)
 
     plt.figure()
